@@ -1,0 +1,25 @@
+{
+  "name": "job-application-tracker",
+  "version": "1.0.0",
+  "description": "a backend service that i will be using for tracking my own job application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/friedcarr0t/job-application-tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/friedcarr0t/job-application-tracker/issues"
+  },
+  "homepage": "https://github.com/friedcarr0t/job-application-tracker#readme",
+  "dependencies": {
+    "dotenv": "^17.0.1",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.1"
+  }
+}
