@@ -85,9 +85,22 @@ const putApp = (req, res) => {
     )
 }
 
+const delApp = (req, res) => {
+    const {id} = req.params;
+    db.query(`DELETE FROM applications WHERE id = ?`,
+        [id], (err, result) => {
+            if(err) return res.status(500).json(err);
+            if(result.affectedRows === 0){
+                return res.status(404).json({error: 'id tidak ditemukan'});
+            }
+            return res.status(200).json({message: 'data berhasil dihapus'});
+        })
+}
+
 module.exports = {
     getApp,
     getId,
     postApp,
-    putApp
+    putApp,
+    delApp
 };
