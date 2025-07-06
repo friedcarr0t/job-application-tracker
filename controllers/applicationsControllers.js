@@ -20,7 +20,7 @@ const postApp = (req, res) => {
     if(!allowedStatus.includes(status)){
         return res.status(400).json({error: "Status tidak valid (menunggu, diterima, ditolak)"});
     }
-
+    
     db.query('INSERT INTO applications (nama_pt, posisi, tgl_apply, status, notes) VALUES (?, ?, ?, ?, ?)',
         [nama_pt, posisi, tgl_apply, status, notes], (err, results) => {
             if(err){
@@ -45,7 +45,55 @@ const getId = (req, res) => {
             } else {
                 return res.status(200).json(result[0]);
             }
+            
+        }
+    )
+}
 
+const putApp = (req, res) => {
+    const {id} = req.params;
+    const {nama_pt, posisi, tgl_apply, status, notes} = req.body
+    const allowedStatus = ["menunggu", "diterima", "ditolak"];
+    
+    let fields = [];
+    let values = [];
+
+    if(!nama_pt&&!posisi&&!tgl_apply&&!status&&!notes){
+        return res.status(400).json({error: "tidak ada yg diupdate"})
+    }
+    if(status && !allowedStatus.includes(status)){
+        return res.status(400).json({error: 'status tidak valid'})
+    }
+    if(nama_pt){
+        fields.push('nama_pt = ?');
+        values.push(nama_pt);
+    }
+    if(posisi){
+        fields.push('posisi = ?');
+        values.push(posisi);
+    }
+    if(tgl_apply){
+        fields.push('tgl_apply = ?');
+        values.push(tgl_apply);
+    }
+    if(status){
+        fields.push('status = ?');
+        values.push(status);
+    }
+    if(notes){
+        fields.push('notes = ?');
+        values.push(notes);
+    }
+    values.push(id)
+
+    const sql = `UPDATE applications SET ${fields.join(', ')} WHERE id = ?`
+    db.query(sql, values, (err, result) => {
+            if(err) return res.status(500).json(err);
+            if(result.affectedRows === 0){
+                return res.status(400).json({error: 'id tidak ditemukakn'})
+            } else {
+                return res.status(200).json(result);
+            }
         }
     )
 }
@@ -54,4 +102,5 @@ module.exports = {
     getApp,
     getId,
     postApp,
+    putApp
 };
